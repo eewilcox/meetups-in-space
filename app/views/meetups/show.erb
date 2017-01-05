@@ -5,12 +5,16 @@
 
 <h3>Meetup Members</h3>
 
-<% @member_usernames.each do |username| %>
-<ul><li><%= username %></li></ul>
+<% @member_info.each do |member| %>
+<ul><li><img width=50px src= "<%= member.avatar_url %>" ><%= member.username %></li></ul>
 <% end %>
 
 
 
-<form action="/meetups/show?id=<%= @meetup.id %>" method="post">
+<form action="/meetups/<%= @meetup.id %>" method="post">
   <input type="submit" value="Join this Meetup"/>
 </form>
+
+<% if @error %>
+  <p><%= @error %></p>
+<% end %>

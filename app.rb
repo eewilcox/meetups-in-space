@@ -55,45 +55,53 @@ post '/meetups/new' do
   @new_meetup.location = @meetup_location
   @new_meetup.description = @meetup_description
   @new_meetup.creator = @meetup_creator
-  @new_meetup.save
-
-
-  @meetup = Meetup.last
-  @members = MeetupsMember.where('meetup_id =?', @meetup.id)
-  @member_usernames = []
-  @members.each do |member|
-    @member_usernames << User.find(member.user_id).username
+  if @new_meetup.save
+    flash[:notice] = "Your meetup was created!"
+    redirect "/meetups/#{@new_meetup.id}"
+  else
+    @error = nil
+    @new_meetup.errors.full_messages.each do |message|
+      @error = message
+    end
+    erb :'meetups/new'
   end
+end
 
-  flash[:notice] = "Boom!"
+get '/meetups/:id' do
+  @meetup_id = params[:id]
+  @meetup = Meetup.find(@meetup_id)
+
+  @members = MeetupsMember.where('meetup_id =?', @meetup_id)
+  @member_info = []
+  @members.each do |member|
+    @member_info << User.find(member.user_id)
+  end
 
   erb :'meetups/show'
 end
 
-get '/meetups/show' do
-  @meetup_id = params[:id]
-  @meetup = Meetup.find(@meetup_id)
-  @members = MeetupsMember.where('meetup_id =?', @meetup_id)
-  @member_usernames = []
-  @members.each do |member|
-    @member_usernames << User.find(member.user_id).username
-  end
-
-  erb :'meetups/show'
-end
-
-post '/meetups/show' do
-  MeetupsMember.create(user_id: session[:user_id], meetup_id: params[:id])
+post "/meetups/:id" do
 
   @meetup_id = params[:id]
   @meetup = Meetup.find(@meetup_id)
   @members = MeetupsMember.where('meetup_id =?', @meetup_id)
-  @member_usernames = []
+  @member_info = []
   @members.each do |member|
-    @member_usernames << User.find(member.user_id).username
+    @member_info << User.find(member.user_id)
   end
 
-  flash[:notice] = "You have joined the meetup."
+  @meetups_member = MeetupsMember.new
+  @meetups_member.user_id = session[:user_id]
+  @meetups_member.meetup_id = params[:id]
+  if @meetups_member.save
+    flash[:notice] = "You have joined the meetup."
+    redirect "/meetups/#{@meetup_id}"
+  else
+    @error = nil
+    @meetups_member.errors.full_messages.each do |message|
+      @error = message
+    end
+    erb :'meetups/show'
+  end
 
-  erb :'meetups/show'
 end
