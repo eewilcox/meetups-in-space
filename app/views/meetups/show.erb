@@ -4,9 +4,13 @@
 <h3>Description: <%= @meetup.description %></h3>
 
 <h3>Meetup Members</h3>
-<ul></ul>
+
+<% @member_usernames.each do |username| %>
+<ul><li><%= username %></li></ul>
+<% end %>
 
 
-<button action="/meetups/:id?id=<%=@%>" method="post" name="meetup_join">Join Meetup</button><br><br><br>
 
-<a href="/meetups">Back to Meetups</a>
+<form action="/meetups/show?id=<%= @meetup.id %>" method="post">
+  <input type="submit" value="Join this Meetup"/>
+</form>

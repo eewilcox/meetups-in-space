@@ -1,5 +1,6 @@
 require 'sinatra'
 require_relative 'config/application'
+require 'pry'
 
 set :bind, '0.0.0.0'  # bind to all interfaces
 
@@ -42,6 +43,7 @@ get '/meetups/new' do
 end
 
 post '/meetups/new' do
+
   @current_user = User.find_by(id: session[:user_id])
   @meetup_name = params[:meetup_name]
   @meetup_location = params[:meetup_location]
@@ -55,11 +57,43 @@ post '/meetups/new' do
   @new_meetup.creator = @meetup_creator
   @new_meetup.save
 
-  redirect '/meetups/'
+
+  @meetup = Meetup.last
+  @members = MeetupsMember.where('meetup_id =?', @meetup.id)
+  @member_usernames = []
+  @members.each do |member|
+    @member_usernames << User.find(member.user_id).username
+  end
+
+  flash[:notice] = "Boom!"
+
+  erb :'meetups/show'
 end
 
-get '/meetups/:id' do
+get '/meetups/show' do
   @meetup_id = params[:id]
   @meetup = Meetup.find(@meetup_id)
+  @members = MeetupsMember.where('meetup_id =?', @meetup_id)
+  @member_usernames = []
+  @members.each do |member|
+    @member_usernames << User.find(member.user_id).username
+  end
+
+  erb :'meetups/show'
+end
+
+post '/meetups/show' do
+  MeetupsMember.create(user_id: session[:user_id], meetup_id: params[:id])
+
+  @meetup_id = params[:id]
+  @meetup = Meetup.find(@meetup_id)
+  @members = MeetupsMember.where('meetup_id =?', @meetup_id)
+  @member_usernames = []
+  @members.each do |member|
+    @member_usernames << User.find(member.user_id).username
+  end
+
+  flash[:notice] = "You have joined the meetup."
+
   erb :'meetups/show'
 end
