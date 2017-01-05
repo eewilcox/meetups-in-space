@@ -33,7 +33,7 @@ get '/sign_out' do
 end
 
 get '/meetups' do
-  @meetups = Meetup.order(:name)
+  @meetups = Meetup.order('lower(name) ASC')
   erb :'meetups/index'
 end
 
@@ -46,13 +46,13 @@ post '/meetups/new' do
   @meetup_name = params[:meetup_name]
   @meetup_location = params[:meetup_location]
   @meetup_description = params[:meetup_description]
-  @meetup_creator = @current_user.id
+  @meetup_creator = @current_user
 
   @new_meetup = Meetup.new
   @new_meetup.name = @meetup_name
   @new_meetup.location = @meetup_location
   @new_meetup.description = @meetup_description
-  @new_meetup.user_id = @meetup_creator
+  @new_meetup.creator = @meetup_creator
   @new_meetup.save
 
   redirect '/meetups/'

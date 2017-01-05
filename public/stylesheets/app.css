@@ -10,6 +10,19 @@ a:visited {
   text-decoration: none;
 }
 
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin: 6px;
+}
+
+button {
+  color: black;
+}
+
 .container {
   max-width: 1024px;
   margin: 0 auto;
@@ -39,6 +52,14 @@ a:visited {
   background-color: #3B9089;
 }
 
+.form_elements {
+  margin: 10px;
+}
+
 #meetup_form input {
   color: black;
+}
+
+#meetups_list {
+  font-size: 24px;
 }
