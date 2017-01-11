@@ -3,7 +3,7 @@ class Meetup < ActiveRecord::Base
   has_many :users, through: :meetups_members
   has_many :meetups_members
 
-  validates :creator, presence: true
+  validates :creator, presence: {message: "- please sign in!"}
   validates :name, presence: true
   validates :name, uniqueness: true
   validates :description, presence: true
