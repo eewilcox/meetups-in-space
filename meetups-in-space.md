@@ -1,5 +1,3 @@
-Git it up
-
 When we noticed that [Meetup.com][meetup] didn't allow users to create meetups that take place in space, we knew we had our new business plan.
 Our goal is to disrupt the meetup space and bring synergy to meetup groups and their members throughout the entire universe.
 Why limit our market to just Earth?
