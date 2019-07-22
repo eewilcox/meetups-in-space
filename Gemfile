@@ -7,6 +7,7 @@ gem 'rake'
 gem 'sinatra'
 gem 'sinatra-activerecord'
 gem 'sinatra-flash'
+gem "omniauth-rails_csrf_protection"
 
 group :development, :test do
   gem 'capybara'
