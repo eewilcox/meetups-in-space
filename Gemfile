@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'activerecord', '~> 4.2'
+gem 'activerecord', '~> 7.0'
 gem 'omniauth-github'
 gem 'pg'
 gem 'rake'
